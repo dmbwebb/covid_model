@@ -1,0 +1,28 @@
+.Rhistory
+.RData
+.Rproj.user
+data/OLD/
+data/processed/
+data/temp/
+figures/
+code/OLD/
+ft_excess_deaths.txt
+Datos_Salesforce_treated.dta
+.DS_Store
+data_save.RData
+timings_dist.png
+gen_data_clean_timings
+data/bogota census/11_Bogota_DTA/CNPV2018_2HOG_A2_11.DTA
+data/bogota census/11_Bogota_DTA/CNPV2018_1VIV_A2_11.DTA
+cases_by_week_bogota.png
+code.zip
+code_fri.zip
+code_12Feb_fromlaptop.zip
+code_13Feb.zip
+code_5_march_from_laptop.zip
+code_24Feb.zip
+code_16feb.zip
+code_8Feb.zip
+code_16mar.zip
+OLD.zip
+CLEAN SLATE TRIAL/
