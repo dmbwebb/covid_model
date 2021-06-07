@@ -3,7 +3,7 @@ library("haven")
 library("lubridate")
 
 load("data/processed/data_save.RData")
-load("data/processed/gen_data_clean_timings.RData")
+# load("data/processed/gen_data_clean_timings.RData", verbose = TRUE)
 
 # IMPORT ------------------------------------------------------------------
 
@@ -85,7 +85,7 @@ overall_prev <- sds_jobs_with_stratum_impute %>%
 # min_date <- ymd("2020-03-01") + days(30)
 min_date <- ymd("2020-04-01")
 max_date <- ymd("2020-04-01") + 60
-days(interval_days(data_save$start_date, data_save$lockdown_end_date[[1]]))
+# days(interval_days(data_save$start_date, data_save$lockdown_end_date[[1]]))
 
 
 
