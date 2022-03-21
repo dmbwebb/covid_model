@@ -251,10 +251,10 @@ plot_policy_scenarios <- scenarios_summ %>%
   labs(y = "Cumulative per capita incidence\n(all SES groups)", x = element_blank(), colour = element_blank())
   
 plot_policy_scenarios
-ggsave("figures/policy_scenarios.pdf", device = cairo_pdf, width = 8, height = 6, scale = 0.8)
+ggsave("figures/policy_scenarios.pdf", width = 8, height = 6, scale = 0.8)
 
 plot_policy_scenarios + geom_label_repel(aes(y = prop_infected_median, label = round(prop_infected_median, 3)), show.legend = FALSE)
-ggsave("figures/policy_scenarios_vallabels.pdf", device = cairo_pdf, width = 8, height = 6, scale = 0.8)
+ggsave("figures/policy_scenarios_vallabels.pdf", width = 8, height = 6, scale = 0.8)
    
 
 
@@ -325,6 +325,33 @@ testing_by_group %>%
                      discrete = TRUE)
 
 
-ggsave("figures/fast_testing_by_group.pdf", device = cairo_pdf, width = 11, height = 6, scale = 0.8)
+ggsave("figures/fast_testing_by_group.pdf", width = 11, height = 6, scale = 0.8)
   
+
+
+
+
+
+# PLOT DATA ---------------------------------------------------------------
+
+
+scenarios_summ %>% 
+  mutate(scenario = factor(scenario,
+                           levels = c(
+                             "Baseline",
+                             "10% initially vaccinated",
+                             "Reduce outside-home contacts by 1",
+                             "Increase isolation by 20 p.p.",
+                             "Increase self-testing by 30 p.p.",
+                             "No testing",
+                             "Fast testing",
+                             "Fast testing + Increase self-testing by 30 p.p."
+                           )),
+         target_type = fct_relevel(factor(target_type), "untargeted"),
+         target_type = fct_explicit_na(target_type),
+         target_type = factor(target_type, labels = c("Untargeted", "Targeted (SES 1&2)", "NA"))) %>% 
+  select(scenario, target_type, prop_infected_median, prop_infected_lower, prop_infected_upper) %>% 
+  write_excel_csv("data/processed/plot_data_fig4.csv")
+
+
 

@@ -2871,10 +2871,10 @@
     
 # Functions for plotting --------------------------------------------------
     
-    summarise_quantiles <- function(.data, ..., q = c(0.01, 0.025, 0.05, 0.25, 0.5, 0.75, 0.95, 0.975, 0.99)) {
+    summarise_quantiles <- function(.data, cols, q = c(0.01, 0.025, 0.05, 0.25, 0.5, 0.75, 0.95, 0.975, 0.99)) {
       .data %>% 
         summarise(
-          across(..., ~ quantile(.x, probs = q, na.rm = TRUE)),
+          across({{cols}}, ~ quantile(.x, probs = q, na.rm = TRUE)),
           q = q
         ) %>% 
         relocate(q)
@@ -2885,7 +2885,7 @@
       else if (is_list(x)) map_chr(x, paste0, collapse = "_")
     }
     
-    quantile_summarise <- function(data, ..., conf_level = 0.95) {
+    quantile_summarise <- function(data, cols, conf_level = 0.95) {
       if (is.null(conf_level)) stop("Please specify a conf_level")
       
       conf_lower <- (1 - conf_level) / 2
@@ -2893,7 +2893,7 @@
       
       data %>% 
         summarise(
-          across(...,
+          across({{cols}},
                  list(median = ~ median(.x, na.rm = TRUE),
                       mean = ~ mean(.x, na.rm = TRUE),
                       upper = ~ quantile(.x, conf_upper, na.rm = TRUE),

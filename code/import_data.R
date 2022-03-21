@@ -101,10 +101,20 @@
     
     
     # Individuals
-    # ind <- read_dta(str_glue("{dir_bogota_census}/CNPV2018_5PER_A2_11.DTA"))
+    ind <- read_dta(str_glue("{dir_bogota_census}/CNPV2018_5PER_A2_11.DTA"))
     
     # Location (to restrict to metropolitan area)
     # geo <- read_dta(str_glue("{dir_bogota_census}/CNPV2018_MGN_A2_11.DTA"))
+    
+    ind_cleaned <- ind %>% 
+      select(building_id = cod_encuestas,
+             hh_id = p_nrohog,
+             age_group = p_edadr,
+             person_id = p_nro_per) %>% 
+      mutate(age_lower = (age_group - 1) * 5)
+      # dups_report(building_id, hh_id, person_id) this is the unique level
+    
+  
     
     
     # Merge building and household data
@@ -122,6 +132,72 @@
       filter_track(stratum %in% 1:6) %>% 
       mutate(stratum = factor(stratum))
 
+    # Merge with ind
+    ind_with_hh <- left_join_track(ind_cleaned, hh_data_merged, by = c("building_id", "hh_id"))
+    
+    ind_with_hh %>% 
+      filter_track(stratum %in% 1:6) %>% 
+      mutate(stratum = as.integer(stratum)) %>% 
+      mutate(i_group = case_when(stratum %in% c(1, 2) ~ 1L,
+                                 stratum %in% c(3, 4) ~ stratum - 1L,
+                                 stratum %in% c(5, 6) ~ 4L)) %>% 
+      ggplot(aes(x = age_lower + 0.1, fill = factor(i_group)), colour = "white") + 
+      geom_histogram(aes(y=..density..), binwidth = 10) + 
+      facet_wrap(~ factor(i_group))
+    
+    
+    ages <- ind_with_hh %>% 
+      filter_track(stratum %in% 1:6) %>% 
+      mutate(stratum = as.integer(stratum)) %>% 
+      mutate(i_group = case_when(stratum %in% c(1, 2) ~ 1L,
+                                 stratum %in% c(3, 4) ~ stratum - 1L,
+                                 stratum %in% c(5, 6) ~ 4L)) %>% 
+      mutate(age_chunks = cut(age_lower, c(-1, 14, 29, 49, 69, 1000), labels = c("0-14", "15-29", "30-49", "50-69", "70+"))) %>% 
+      # count_prop(age_lower, age_chunks)
+      group_by(i_group, age_chunks) %>%
+      summarise(n = n()) %>% 
+      group_by(i_group) %>% 
+      mutate(prop = n / sum(n))
+    
+    age_table <- ages %>% 
+      mutate(i_group = factor(i_group)) %>% 
+      mutate(i_group = recode_i_group(i_group)) %>% 
+      select(-n) %>% 
+      # mutate(prop = format(round(prop * 100, 1), nsmall = 1)) %>% 
+      # mutate(prop = str_glue("{prop}%")) %>% 
+      pivot_wider(names_from = i_group, values_from = prop) %>% 
+      print %>% 
+      rename(Age = age_chunks) %>% 
+      mutate(Age = as.character(Age))
+  
+    total_perc_row <- c(
+      "Total:",
+      rep("100%", 4)
+    )
+    
+    total_row <- c(
+      "Observations:",
+      ages %>% group_by(i_group) %>% summarise(n = sum(n)) %>% .$n
+    )
+    
+    age_table_totals <- age_table %>% 
+      rbind(total_perc_row) %>% 
+      rbind(total_row)
+    
+    write_excel_csv(age_table_totals, path = "data/processed/age_table.csv")
+    
+    # library(xtable)
+    # print(xtable(age_table_totals), include.rownames = FALSE, booktabs = TRUE)
+    # ?print.xtable
+    
+    
+    ages %>% 
+      ggplot(aes(x = age_chunks, fill = factor(stratum))) + 
+      geom_col(aes(y = prop), colour = "white") + 
+      facet_wrap(~ factor(stratum))
+    
+    
+    
     
     # PLOT THE CDFs of housing size
     hh_data_cleaned %>%

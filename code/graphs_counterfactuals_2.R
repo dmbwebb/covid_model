@@ -145,7 +145,7 @@ plot_epidemic_curve <- group_diff_at_t %>%
 plot_epidemic_curve <- graph_remove_bottom_left(plot_epidemic_curve)
 
 
-ggsave("figures/counterfactuals_epidemic_curve_appendix.pdf", device = cairo_pdf, width = 10, height = 5.5, scale = 0.8, plot = plot_epidemic_curve)
+ggsave("figures/counterfactuals_epidemic_curve_appendix.pdf", width = 10, height = 5.5, scale = 0.8, plot = plot_epidemic_curve)
 
 
 plot_home_epidemic_curve <- group_diff_at_t %>% 
@@ -201,10 +201,10 @@ plot_home_epidemic_curve <- graph_remove_bottom_left(plot_home_epidemic_curve)
 # grid.newpage()
 # grid_plot <- grid.arrange(g)
 
-ggsave("figures/counterfactuals_home_epidemic_curve.pdf", device = cairo_pdf, width = 8, height = 4.5, scale = 0.9, plot = plot_home_epidemic_curve)
+ggsave("figures/counterfactuals_home_epidemic_curve.pdf", width = 8, height = 4.5, scale = 0.9, plot = plot_home_epidemic_curve)
 
 
-# ggsave("figures/prop_infected_main.pdf", device = cairo_pdf, width = 9.5, height = 4, scale = 0.8, plot = grid_plot)
+# ggsave("figures/prop_infected_main.pdf", width = 9.5, height = 4, scale = 0.8, plot = grid_plot)
 
 
 
@@ -324,12 +324,12 @@ plot_group_diffs <- function(.data, y, ylab = "Y", text_label = FALSE, text_labe
 # PLOT
 # Prop infected in each scenario
 plot_group_diffs(group_diff_all_summ, y = prop_infected, "Cumulative per capita incidence (entire epidemic)")
-ggsave("figures/prop_infected_appendix.pdf", device = cairo_pdf, width = 8, height = 4.5, scale = 1)
+ggsave("figures/prop_infected_appendix.pdf", width = 8, height = 4.5, scale = 1)
 
 # plot_group_diffs(group_diff_all_summ, y = prop_infected, "Cumulative per capita incidence (entire epidemic)") + geom_label_repel(aes(y = y_0.5, label = round(y_0.5, 3)))
 plot_group_diffs(group_diff_all_summ, y = prop_infected, "Cumulative per capita incidence (entire epidemic)", text_label = TRUE, text_label_thresh = 10)
   # geom_text(aes(y = y_0.5, label = paste0(round(y_0.5, 2) * 100)), colour = "white", position = position_stack(vjust = 0.5), show.legend = FALSE)
-ggsave("figures/prop_infected_appendix_vallabels.pdf", device = cairo_pdf, width = 8, height = 4.5, scale = 1.3)
+ggsave("figures/prop_infected_appendix_vallabels.pdf", width = 8, height = 4.5, scale = 1.3)
 
 
  
@@ -368,7 +368,7 @@ ggsave("figures/prop_infected_appendix_vallabels.pdf", device = cairo_pdf, width
     grid.newpage()
     grid_plot <- grid.arrange(g)
     
-    ggsave("figures/prop_infected_main.pdf", device = cairo_pdf, width = 9.5, height = 4, scale = 0.8, plot = grid_plot)
+    ggsave("figures/prop_infected_main.pdf", width = 9.5, height = 4, scale = 0.8, plot = grid_plot)
     
     
     # WITH VAL LABELS
@@ -401,7 +401,7 @@ ggsave("figures/prop_infected_appendix_vallabels.pdf", device = cairo_pdf, width
     grid.newpage()
     grid_plot <- grid.arrange(g)
     
-    ggsave("figures/prop_infected_main_vallabels.pdf", device = cairo_pdf, width = 9.5, height = 4, scale = 0.8, plot = grid_plot)
+    ggsave("figures/prop_infected_main_vallabels.pdf", width = 9.5, height = 4, scale = 0.8, plot = grid_plot)
 
 
 
@@ -430,15 +430,15 @@ plot_group_diff_split_params <- plot_group_diffs(group_diff_split_params,
 
 plot_group_diff_split_params <- graph_remove_bottom_left(plot_group_diff_split_params)
 
-ggsave("figures/prop_infected_within_home_split.pdf", device = cairo_pdf, width = 8, height = 4.5, scale = 0.9, plot = plot_group_diff_split_params)
+ggsave("figures/prop_infected_within_home_split.pdf", width = 8, height = 4.5, scale = 0.9, plot = plot_group_diff_split_params)
 
 
  # Gap (relative to group 6) in each scenario
 plot_group_diffs(group_diff_all_summ, y = diff_prop_infected, "Gap relative to group 6")
-ggsave("figures/inequality_appendix.pdf", device = cairo_pdf, width = 8, height = 4.5, scale = 1)
+ggsave("figures/inequality_appendix.pdf", width = 8, height = 4.5, scale = 1)
 
 plot_group_diffs(group_diff_all_summ, y = diff_prop_infected, "Gap relative to group 6") + geom_label_repel(aes(y = y_0.5, label = round(y_0.5, 3)))
-ggsave("figures/inequality_appendix_vallabels.pdf", device = cairo_pdf, width = 8, height = 4.5, scale = 1.3)
+ggsave("figures/inequality_appendix_vallabels.pdf", width = 8, height = 4.5, scale = 1.3)
 
 
 # 3. Decoposition (v2) ----------------------------------------------------
@@ -497,11 +497,104 @@ ggsave("figures/inequality_appendix_vallabels.pdf", device = cairo_pdf, width = 
 # 
 # plot_inequality_decomposition
 # 
-# ggsave("figures/inequality_decomposition_appendix.pdf", device = cairo_pdf,  width = 6, height = 4.5, scale = 1)
+# ggsave("figures/inequality_decomposition_appendix.pdf",  width = 6, height = 4.5, scale = 1)
 
 
 
 
 # plot_inequality_decomposition + geom_label_repel(aes(y = prop_reduction, label = round(prop_reduction, 3)), position = position_dodge(0.7))
-# ggsave("figures/inequality_decomposition_appendix_vallabels.pdf", device = cairo_pdf,  width = 6, height = 4.5, scale = 3)
+# ggsave("figures/inequality_decomposition_appendix_vallabels.pdf",  width = 6, height = 4.5, scale = 3)
 
+
+
+
+
+# Plot data ---------------------------------------------------------------
+
+
+
+plot_group_diff_main <- plot_group_diffs(
+  group_diff_main,
+  y = prop_infected,
+  "Cumulative per capita incidence\n(entire epidemic)",
+  text_label = TRUE,
+  text_label_thresh = 7,
+  label_nudge = 0.06
+) +
+  facet_grid(fifty ~ parameter_set, scales = "free_x") +
+  theme(legend.position = c(0.08, 0.24))
+
+
+group_diff_main %>% 
+  mutate(i_group = recode_i_group(i_group)) %>% 
+  summarise_quantiles(prop_infected) %>% 
+  select(parameter_set_label, i_group, q, prop_infected) %>% 
+  filter(q %in% c(0.025, 0.5, 0.975)) %>% 
+  pivot_wider(names_from = q, names_prefix = "y_", values_from = prop_infected) %>% 
+  select(parameter_set, prop_reduction_in_inequality = fifty, parameter_set_label, ses_group = i_group, y_lower = y_0.025, y = y_0.5, y_upper = y_0.975) %>% 
+  write_excel_csv("data/processed/plot_data_fig3.csv")
+
+
+
+
+
+# Make into function
+plot_group_diffs <- function(.data, y, ylab = "Y", text_label = FALSE, text_label_thresh = 0, label_nudge = 0.1) {
+  
+  # .data <- group_diff_all_summ; y = 
+  # plot_group_diffs(group_diff_all_summ, y = prop_infected, "Cumulative per capita incidence (entire epidemic)", text_label = TRUE, text_label_thresh = 10)
+  
+  
+  data_processed <- .data %>% 
+    mutate(i_group = recode_i_group(i_group)) %>% 
+    summarise_quantiles(prop_infected) %>% 
+    select(parameter_set_label, i_group, q, prop_infected) %>% 
+    filter(q %in% c(0.025, 0.5, 0.975)) %>% 
+    pivot_wider(names_from = q, names_prefix = "y_", values_from = prop_infected)
+  
+  # data_processed <- group_diff_all_summ %>% 
+  #   mutate(i_group = recode_i_group(i_group)) %>% 
+  #   summarise_quantiles(prop_infected) %>% 
+  #   select(parameter_set_label, i_group, q, prop_infected) %>% 
+  #   filter(q %in% c(0.025, 0.5, 0.975)) %>% 
+  #   pivot_wider(names_from = q, names_prefix = "y_", values_from = prop_infected)
+  
+  p <- ggplot(data_processed, aes(x = i_group, fill = factor(i_group))) + 
+    geom_col(aes(y = y_0.5)) + 
+    geom_errorbar(aes(ymin = y_0.025, ymax = y_0.975), width = 0.2, size = 0.5, colour = "#374561") + 
+    facet_wrap(~ parameter_set_label) +
+    labs(y = ylab, x = "SES Group", fill = "SES Group") + 
+    theme_custom() + 
+    theme(legend.position = "bottom", panel.grid.minor = element_blank(), panel.grid.major.x = element_blank()) + 
+    geom_hline(yintercept = 0, colour = "darkgrey", size = 0.4) + 
+    scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+    scale_fill_viridis(option = "viridis",
+                       begin = 0.3,
+                       end = 1,
+                       discrete = TRUE)
+  # scale_x_continuous(breaks = 1:5)
+  
+  if (text_label) {
+    p <- p + 
+      geom_label(data = data_processed %>% filter(y_0.5 * 100 >= text_label_thresh),
+                 aes(y = y_0.5, label = paste0(round(y_0.5, 2) * 100)),
+                 size = 2,
+                 label.size = 0.2,
+                 label.padding = unit(0.15, "lines"),
+                 colour = "black", fill = "white", alpha = 0.5, position = position_stack(vjust = 0.5)) +
+      geom_label(data = data_processed %>% filter(y_0.5 * 100 < text_label_thresh & round(y_0.5, 2) * 100 >= 1),
+                 aes(y = y_0.5, label = paste0(round(y_0.5, 2) * 100)),
+                 size = 2,
+                 label.size = 0.2,
+                 label.padding = unit(0.15, "lines"),
+                 colour = "black",
+                 nudge_y = label_nudge,
+                 fill = "white",
+                 alpha = 0.5
+                 # position = position_stack(vjust = 0.5)
+      )
+  }
+  
+  return(p)
+  
+}

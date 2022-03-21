@@ -17,7 +17,7 @@
     
     
     # Isolate no mobility change
-    baseline <- group_diff_slim %>% filter(parameter_set == "baseline")
+    baseline <- group_diff_slim_tightened %>% filter(parameter_set == "baseline")
     
     mobility_change <- final_sim
     
@@ -70,7 +70,7 @@
       mutate(model_pc_roll = n_confirmed_new_model_pc_roll) %>% 
       select(sim_id, t, model_pc_roll) %>% 
       group_by(t) %>% 
-      quantile_summarise(model_pc_roll, conf_level = conf_level)
+      quantile_summarise(c(model_pc_roll), conf_level = conf_level)
     
     # lower bound date is equivalent to which t?
     lower_bound_t <- model_cases_slim %>% filter(model_pc_roll_mean >= lower_bound_date_value) %>% .$t %>% first()
@@ -282,7 +282,7 @@
     
     plot_model_match_detected
     
-    ggsave("figures/model_match.pdf", device = cairo_pdf,  width = 9, height = 3, scale = 1.5)
+    ggsave("figures/model_match.pdf",   width = 9, height = 3, scale = 1.5)
     
     
     
@@ -319,7 +319,7 @@
                          discrete = TRUE) + 
       theme_custom()
     
-    ggsave("figures/model_match_conf_int.pdf", device = cairo_pdf,  width = 6, height = 6, scale = 1.5)
+    ggsave("figures/model_match_conf_int.pdf",   width = 6, height = 6, scale = 1.5)
     
     
     # (3) Cumulative cases
@@ -342,7 +342,7 @@
                          discrete = TRUE) + 
       theme_custom()
     
-    ggsave("figures/model_match_cumulative.pdf", device = cairo_pdf,  width = 6, height = 6, scale = 1.5)
+    ggsave("figures/model_match_cumulative.pdf",   width = 6, height = 6, scale = 1.5)
     
     
     
@@ -369,7 +369,7 @@
       labs(y = "Share of cumulative confirmed cases from SES group", x = "Date of Confirmed Case", colour = "SES Group", fill = "SES Group", linetype = element_blank())
     
     
-    ggsave("figures/model_match_shares.pdf", device = cairo_pdf,  width = 6, height = 6, scale = 1.5)
+    ggsave("figures/model_match_shares.pdf",   width = 6, height = 6, scale = 1.5)
     
     
     
@@ -384,7 +384,7 @@
       scale_y_continuous(labels = scales::percent) + 
       coord_cartesian(ylim = c(NA, 0.012))
       
-    ggsave("figures/model_match_total.pdf", device = cairo_pdf,  width = 6, height = 2.5, scale = 1.5)
+    ggsave("figures/model_match_total.pdf",   width = 6, height = 2.5, scale = 1.5)
     
     
     # (6) CUMULATIVE (all groups)
@@ -399,7 +399,7 @@
       # coord_cartesian(ylim = c(NA, 0.012))
     
     
-    ggsave("figures/model_match_total_cum.pdf", device = cairo_pdf,  width = 6, height = 2.5, scale = 1.5)
+    ggsave("figures/model_match_total_cum.pdf",   width = 6, height = 2.5, scale = 1.5)
     
     
     
@@ -427,7 +427,7 @@
       labs(y = "Per capita incidence\n(all groups, previous 2 weeks)", x = "Date of Case", colour = "Case Type", linetype = "Case Type") + 
       scale_y_continuous(labels = scales::percent)
     
-    ggsave("figures/model_match_real_vs_detected.pdf", device = cairo_pdf,  width = 6, height = 2.5, scale = 1.5)
+    ggsave("figures/model_match_real_vs_detected.pdf",   width = 6, height = 2.5, scale = 1.5)
     
     
     # (8) Comparing detected vs true cases (by group)
@@ -455,7 +455,7 @@
       labs(y = "Per capita incidence (previous 2 weeks)", x = "Date of Case", colour = "SES Group") + 
       scale_y_continuous(labels = scales::percent)
     
-    ggsave("figures/model_match_real_vs_detected_by_group.pdf", device = cairo_pdf,  width = 6, height = 3.5, scale = 1.5)
+    ggsave("figures/model_match_real_vs_detected_by_group.pdf",   width = 6, height = 3.5, scale = 1.5)
     
     
     # (9) Summary - detected ratio
@@ -482,7 +482,7 @@
     
     plot_model_match_prop_detected
 
-    ggsave("figures/model_match_prop_detected.pdf", device = cairo_pdf,  width = 6, height = 2.5, scale = 1.5)    
+    ggsave("figures/model_match_prop_detected.pdf",   width = 6, height = 2.5, scale = 1.5)    
     
     
     plot_model_match_prop_detected + geom_label_repel(data = model_vs_data_comp %>% 
@@ -492,7 +492,7 @@
                                                 aes(y = detected_ratio, label = round(detected_ratio, 3)))
     
     
-    ggsave("figures/model_match_prop_detected_vallabels.pdf", device = cairo_pdf,  width = 6, height = 2.5, scale = 1.5)    
+    ggsave("figures/model_match_prop_detected_vallabels.pdf",   width = 6, height = 2.5, scale = 1.5)    
     
     
     
@@ -591,7 +591,7 @@
     
     plot_model_match_death
     
-    ggsave("figures/model_match_deaths.pdf", device = cairo_pdf,  width = 9, height = 3, scale = 1.5)
+    ggsave("figures/model_match_deaths.pdf",   width = 9, height = 3, scale = 1.5)
     
     # (2) New by group with confidence intervals
     # Transform to get data and model 2x2
@@ -614,7 +614,7 @@
                          discrete = TRUE) + 
       theme_custom()
     
-    ggsave("figures/model_match_deaths_conf_int.pdf", device = cairo_pdf,  width = 6, height = 6, scale = 1.5)
+    ggsave("figures/model_match_deaths_conf_int.pdf",   width = 6, height = 6, scale = 1.5)
     
   
     
@@ -681,11 +681,11 @@
     
     plot_model_match_covida
       
-    ggsave("figures/model_match_covida.pdf", device = cairo_pdf,  width = 6, height = 3, scale = 0.8)
+    ggsave("figures/model_match_covida.pdf",   width = 6, height = 3, scale = 0.8)
 
         
     plot_model_match_covida + geom_label_repel(aes(y = n_cum_pc, label = round(n_cum_pc, 3)))
-    ggsave("figures/model_match_covida_vallabels.pdf", device = cairo_pdf,  width = 6, height = 3, scale = 1.5)
+    ggsave("figures/model_match_covida_vallabels.pdf",   width = 6, height = 3, scale = 1.5)
     
       
     
@@ -708,7 +708,7 @@
     # ?ggarrange
     plot_final
     
-    ggsave("figures/model_match_covida_and_deaths.pdf", device = cairo_pdf,  width = 7, height = 4.5, scale = 1.2)
+    ggsave("figures/model_match_covida_and_deaths.pdf",   width = 7, height = 4.5, scale = 1.2)
      
     
     library("ggpubr")
@@ -726,11 +726,43 @@
     # ?ggarrange
     plot_final_detected
     
-    ggsave("figures/model_match_covida_detected.pdf", device = cairo_pdf,  width = 7, height = 4.5, scale = 1.2)
+    ggsave("figures/model_match_covida_detected.pdf", width = 7, height = 4.5, scale = 1.2)
        
     
     
     
+
+# PLOT DATA ---------------------------------------------------------------
+
+
+    
+    # PLOT DATA FOR THIS FIGURE
+    
+    # TOP HALF 
+    model_by_group_with_data %>% count_prop(model_type) %>% 
+      mutate(model_type = factor(model_type, levels = c("data", "baseline", "mobility_change"),
+                                 labels = c("(a) Data (HSB)", "(b) Model (No mobility change)", "(c) Model (Mobility change)"))) %>% 
+      select(model_type, t, date, i_group, n_new_confirmed_week_pc) %>% 
+      write_excel_csv("data/processed/plot_data_fig2a.csv")
+    
+    # BOTTOM HALF
+    model_match_covida %>% 
+      filter(date == ymd("2021-03-3")) %>% 
+      mutate(
+        model_type = fct_recode(
+          factor(model_type, levels = c("covida", "baseline", "mobility_change")),
+          "(d) Data (CoVIDA)" = "covida",
+          "(e) Model (No mobility change)" = "baseline",
+          "(f) Model (Mobility change)" = "mobility_change"
+        )
+      ) %>% 
+      select(model_type, ses_group = i_group, n_cum_pc, n_cum_pc_lower, n_cum_pc_upper)
+    
+    model_by_group_with_data %>% count_prop(model_type) %>% 
+      mutate(model_type = factor(model_type, levels = c("data", "baseline", "mobility_change"),
+                                 labels = c("(a) Data (HSB)", "(b) Model (No mobility change)", "(c) Model (Mobility change)"))) %>% 
+      select(model_type, t, date, i_group, n_new_confirmed_week_pc) %>% 
+      write_excel_csv("data/processed/plot_data_fig2b.csv")
     
 
 # Share vs COVIDA ---------------------------------------------------------
@@ -816,7 +848,7 @@
       labs(y = "Share of cumulative cases from SES group", x = "Date of case", colour = "SES Group", fill = "SES Group", linetype = element_blank())
     
     
-    ggsave("figures/model_match_shares_covida.pdf", device = cairo_pdf,  width = 6, height = 6, scale = 0.8)
+    ggsave("figures/model_match_shares_covida.pdf",   width = 6, height = 6, scale = 0.8)
     
     
     

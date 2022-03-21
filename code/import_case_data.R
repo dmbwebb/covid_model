@@ -59,7 +59,7 @@ library(trackr)
       mutate(stratum = coalesce(as.numeric(stratum), stratum_2)) %>% 
       select(-stratum_2) %>% 
       count_prop(stratum) %>% 
-      mutate_track(across(stratum, ~ if_else(as.numeric(.x) %in% 1:6, as.numeric(.x), NA_real_))) %>% 
+      mutate(across(stratum, ~ if_else(as.numeric(.x) %in% 1:6, as.numeric(.x), NA_real_))) %>% 
       mutate(across(starts_with("date"), dmy)) %>% 
       count_prop(stratum, stratum_pop) %>% 
       count_prop(year(date_symptoms), year(date_results), year(date_consultation))
