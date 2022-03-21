@@ -22,7 +22,12 @@
     
     params_graph_df <- get_defaults(group_diff)
     
+    conf_int_thresh <- qnorm(0.975)
     
+    # tibble(
+    #   x = rnorm(1000)
+    # ) %>% 
+    #   summarise(mean_se(x, mult = conf_int_thresh))
 
 # Functions for plotting --------------------------------------------------
 
@@ -66,7 +71,7 @@
         mutate(i_group = recode_i_group(i_group)) %>% 
         group_by(i_group) %>% 
         filter(!is.na({{y}})) %>% 
-        summarise(mean_se({{y}})) %>%
+        summarise(mean_se({{y}}, mult = conf_int_thresh)) %>%
         ggplot(aes(x = factor(i_group), y = y, colour = factor(i_group))) +
         geom_point(size = 2) +
         geom_errorbar(aes(ymin = ymin, ymax = ymax), width = 0.15) +
@@ -131,7 +136,7 @@
     
     
     
-    ggsave("figures/test_delay_dist.pdf", device = cairo_pdf, width = 7, height = 6, scale = 0.7)
+    ggsave("figures/test_delay_dist.pdf", width = 7, height = 6, scale = 0.7)
     
     # CT delay
     params_graph_df$ct_delay_data %>% 
@@ -222,15 +227,15 @@
       labs(x = "Household Size", y = "Density") + 
       theme_custom()
     
-    ggsave("figures/hh_size_hist.pdf", device = cairo_pdf,  width = 6, height = 4)
+    ggsave("figures/hh_size_hist.pdf",  width = 6, height = 4)
     
     hh_size_dedup %>% 
       mutate(i_group = recode_i_group(i_group)) %>% 
       group_by(i_group) %>% 
-      summarise(mean_se(hh_size)) %>%
+      summarise(mean_se(hh_size, mult = conf_int_thresh)) %>%
       ggplot(aes(x = factor(i_group), y = y, colour = factor(i_group))) +
       geom_point(size = 3) +
-      geom_errorbar(aes(ymin = ymin, ymax = ymax), width = 0) +
+      geom_errorbar(aes(ymin = ymin, ymax = ymax), width = 0.2) +
       labs(x = "SES group", y = "Mean HH Size") +
       scale_colour_viridis(option = "viridis",
                            begin = 0.3,
@@ -239,16 +244,16 @@
     
     
     
-    ggsave("figures/hh_size_means.pdf", device = cairo_pdf,  width = 4, height = 3)
+    ggsave("figures/hh_size_means.pdf",  width = 4, height = 3)
     
     
     hh_size_dedup %>% 
       mutate(i_group = recode_i_group(i_group)) %>% 
       group_by(i_group) %>% 
-      summarise(mean_se(n_rooms)) %>%
+      summarise(mean_se(n_rooms, mult = conf_int_thresh)) %>%
       ggplot(aes(x = factor(i_group), y = y, colour = factor(i_group))) +
       geom_point(size = 3) +
-      geom_errorbar(aes(ymin = ymin, ymax = ymax), width = 0) +
+      geom_errorbar(aes(ymin = ymin, ymax = ymax), width = 0.1) +
       labs(x = "SES group", y = "Mean Number of Rooms") +
       scale_colour_viridis(option = "viridis",
                            begin = 0.3,
@@ -256,7 +261,7 @@
       theme_custom(panel.grid.major.x = element_blank())
     
     
-    ggsave("figures/hh_n_rooms.pdf", device = cairo_pdf,  width = 4, height = 3)
+    ggsave("figures/hh_n_rooms.pdf",  width = 4, height = 3)
     
     
     # data_save$hh_data_bogota %>% mean_sd(hh_size)
